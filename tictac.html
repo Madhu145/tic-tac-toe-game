@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe Game</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  .board {
+    display: inline-block;
+    margin-top: 20px;
+  }
+  .cell{
+    width: 50px;
+    height: 50px;
+    font-size: 32px;
+    border: 1px solid black;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<h1>Tic Tac Toe</h1>
+<div class="board" id="board">
+  <div class="cell" onclick="handleClick(0)"></div>
+  <div class="cell" onclick="handleClick(1)"></div>
+  <div class="cell" onclick="handleClick(2)"></div><br>
+  <div class="cell" onclick="handleClick(3)"></div>
+  <div class="cell" onclick="handleClick(4)"></div>
+  <div class="cell" onclick="handleClick(5)"></div><br>
+  <div class="cell" onclick="handleClick(6)"></div>
+  <div class="cell" onclick="handleClick(7)"></div>
+  <div class="cell" onclick="handleClick(8)"></div>
+</div>
+<p id="status"></p>
+
+<script>
+  let board = ['', '', '', '', '', '', '', '', ''];
+  let currentPlayer = 'X';
+  let gameActive = true;
+
+  const winConditions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+
+  function checkWin() {
+    for (let condition of winConditions) {
+      let [a, b, c] = condition;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function handleClick(index) {
+    if (gameActive && board[index] === '') {
+      board[index] = currentPlayer;
+      document.getElementsByClassName('cell')[index].innerText = currentPlayer;
+      
+      if (checkWin()) {
+        document.getElementById('status').innerText = `${currentPlayer} wins`;
+        gameActive = false;
+      } else if (!board.includes('')) {
+        document.getElementById('status').innerText = "It's a draw!";
+        gameActive = false;
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        document.getElementById('status').innerText = `${currentPlayer}'s turn`;
+      }
+    }
+  }
+
+
+  function restartGame() {
+    // Reset board array
+    board = ['', '', '', '', '', '', '', '', ''];
+    
+    // Reset current player to 'X'
+    currentPlayer = 'X';
+    
+    // Reset game status and active state
+    gameActive = true;
+    
+    // Clear all cell displays
+    let cells = document.getElementsByClassName('cell');
+    for (let cell of cells) {
+      cell.innerText = '';
+    }
+    
+    // Clear status message
+    document.getElementById('status').innerText = `${currentPlayer}'s turn`;
+  }
+</script>
+</body>
+<button onclick="restartGame()">Restart Game</button>
+
+</html>
